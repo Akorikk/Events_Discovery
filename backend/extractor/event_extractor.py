@@ -21,8 +21,10 @@ Rules:
 - date = event date
 - location = venue or city
 - description = event category or type 
+- description must NOT include the location
 
-description is important If description is empty still include it with No description.
+description is important If description is missing return:
+"No description"
 
 Text:
 {raw_text}
