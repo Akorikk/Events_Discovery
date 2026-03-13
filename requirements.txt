@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+requests
+beautifulsoup4
+playwright
+pydantic
+sqlalchemy
+sqlite-utils
+python-dotenv
+apscheduler
+streamlit
+pandas
+ollama
