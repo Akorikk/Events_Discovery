@@ -45,7 +45,7 @@ Text:
 
         try:
             return json.loads(json_text)
-        except:
+        except Exception:
             return {"error": "JSON parsing failed", "raw": json_text}
 
     return {"error": "No JSON found", "raw": content}

@@ -12,7 +12,7 @@ def save_event(event_data):
     ).first()
 
     if existing:
-        print("Duplicate event skipped:", event_data["title"])
+        print(f"Duplicate event skipped: {event_data['title']}")
         db.close()
         return None
 
@@ -27,7 +27,7 @@ def save_event(event_data):
     db.add(event)
     db.commit()
 
-    print("Saved event:", event.title)
+    print(f"Saved event: {event.title}")
 
     db.close()
 

@@ -2,11 +2,11 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def crawl_heilbronn(url):
+def crawl_eventfrog(url):
 
     events = []
 
-    print(f"Crawling Heilbronn site: {url}")
+    print(f"Crawling Eventfrog: {url}")
 
     try:
         response = requests.get(url, timeout=15)
@@ -14,7 +14,7 @@ def crawl_heilbronn(url):
 
         soup = BeautifulSoup(response.text, "html.parser")
 
-        cards = soup.select("article, .event, .veranstaltung")
+        cards = soup.select("article")
 
         for card in cards:
 
@@ -29,6 +29,6 @@ def crawl_heilbronn(url):
             })
 
     except Exception as e:
-        print(f"Heilbronn crawler error: {e}")
+        print(f"Eventfrog crawler error: {e}")
 
     return events

@@ -2,11 +2,11 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def crawl_heilbronn(url):
+def crawl_mvp(url):
 
     events = []
 
-    print(f"Crawling Heilbronn site: {url}")
+    print(f"Crawling MVP: {url}")
 
     try:
         response = requests.get(url, timeout=15)
@@ -14,10 +14,9 @@ def crawl_heilbronn(url):
 
         soup = BeautifulSoup(response.text, "html.parser")
 
-        cards = soup.select("article, .event, .veranstaltung")
+        cards = soup.select(".abl-entry-wrapper")
 
         for card in cards:
-
             text = card.get_text(separator=" ", strip=True)
 
             if len(text) < 60:
@@ -29,6 +28,6 @@ def crawl_heilbronn(url):
             })
 
     except Exception as e:
-        print(f"Heilbronn crawler error: {e}")
+        print(f"MVP crawler error: {e}")
 
     return events
