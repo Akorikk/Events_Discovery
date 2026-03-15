@@ -4,9 +4,23 @@ import re
 import dateparser
 
 
-def normalize_date(date_string):
+"""def normalize_date(date_string):
 
     parsed = dateparser.parse(date_string)
+
+    if parsed:
+        return parsed.strftime("%Y-%m-%d")
+
+    return date_string"""
+
+def normalize_date(date_string):
+
+    import dateparser
+
+    parsed = dateparser.parse(
+        date_string,
+        languages=["de", "en"]
+    )
 
     if parsed:
         return parsed.strftime("%Y-%m-%d")
