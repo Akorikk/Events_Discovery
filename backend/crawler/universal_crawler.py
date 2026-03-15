@@ -57,13 +57,13 @@ def crawl_all_sources():
 
             soup = BeautifulSoup(response.text, "html.parser")
 
-            # remove scripts and styles
+        
             for tag in soup(["script", "style", "noscript"]):
                 tag.decompose()
 
             blocks = soup.stripped_strings
 
-            seen = set()   # ← ADD HERE
+            seen = set()   
 
             for block in blocks:
 

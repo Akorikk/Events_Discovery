@@ -11,3 +11,4 @@ apscheduler
 streamlit
 pandas
 ollama
+dateparser 

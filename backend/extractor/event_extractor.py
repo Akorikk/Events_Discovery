@@ -1,6 +1,17 @@
 import ollama
 import json
 import re
+import dateparser
+
+
+def normalize_date(date_string):
+
+    parsed = dateparser.parse(date_string)
+
+    if parsed:
+        return parsed.strftime("%Y-%m-%d")
+
+    return date_string
 
 
 def extract_event(raw_text):
@@ -20,10 +31,10 @@ Rules:
 - title = name of the event
 - date = event date
 - location = venue or city
-- description = event category or type 
+- description = event category or type
 - description must NOT include the location
 
-description is important If description is missing return:
+If description is missing return:
 "No description"
 
 Text:
@@ -37,15 +48,30 @@ Text:
 
     content = response["message"]["content"]
 
-    # Extract JSON block using regex
-    match = re.search(r'\{.*\}', content, re.DOTALL)
+    match = re.search(r'\{[\s\S]*?\}', content)
 
     if match:
+
         json_text = match.group()
 
         try:
-            return json.loads(json_text)
-        except Exception:
-            return {"error": "JSON parsing failed", "raw": json_text}
 
-    return {"error": "No JSON found", "raw": content}
+            data = json.loads(json_text)
+
+            # normalize date
+            if "date" in data:
+                data["date"] = normalize_date(data["date"])
+
+            return data
+
+        except Exception:
+
+            return {
+                "error": "JSON parsing failed",
+                "raw": json_text
+            }
+
+    return {
+        "error": "No JSON found",
+        "raw": content
+    }

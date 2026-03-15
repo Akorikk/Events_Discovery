@@ -1,4 +1,4 @@
-import requests
+"""import requests
 from bs4 import BeautifulSoup
 
 
@@ -36,6 +36,62 @@ def crawl_mvp(base_url):
         page += 1
 
         if page > 10: 
+            break
+
+    return events """
+
+import requests
+from bs4 import BeautifulSoup
+
+
+def crawl_mvp(base_url):
+
+    events = []
+    seen = set()
+
+    page = 1
+
+    while True:
+
+        url = f"{base_url}?page={page}"
+
+        print(f"Crawling MVP page {page}")
+
+        try:
+
+            response = requests.get(url, timeout=15)
+
+            soup = BeautifulSoup(response.text, "html.parser")
+
+            cards = soup.select(".abl-entry-wrapper")
+
+            if not cards:
+                break
+
+            for card in cards:
+
+                raw_text = card.get_text(separator=" ", strip=True)
+
+                if len(raw_text) < 40:
+                    continue
+
+                # skip duplicates
+                if raw_text in seen:
+                    continue
+
+                seen.add(raw_text)
+
+                events.append({
+                    "raw_text": raw_text,
+                    "source_url": base_url
+                })
+
+        except Exception as e:
+            print("MVP crawler error:", e)
+
+        page += 1
+
+        if page > 10:
             break
 
     return events
