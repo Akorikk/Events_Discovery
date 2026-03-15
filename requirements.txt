@@ -14,3 +14,4 @@ ollama
 dateparser 
 sentence-transformers
 scikit-learn
+instaloader
