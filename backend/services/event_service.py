@@ -1,5 +1,6 @@
 from backend.database.db import SessionLocal
 from backend.database.models import Event
+from backend.services.deduplicator import is_duplicate
 
 
 def raw_event_exists(raw_text):
@@ -20,19 +21,22 @@ def raw_event_exists(raw_text):
 
 
 def save_event(event_data):
+    """
+    Save event to database with embedding-based duplicate detection.
+    """
 
     db = SessionLocal()
 
-    existing = db.query(Event).filter(
-        Event.title == event_data["title"],
-        Event.date == event_data["date"]
-    ).first()
+    # Embedding similarity duplicate detection
+    if is_duplicate(event_data):
 
-    if existing:
-        print(f"Duplicate event skipped: {event_data['title']}")
+        print(f"Duplicate detected by embedding: {event_data['title']}")
+
         db.close()
+
         return None
 
+    #Save new event
     event = Event(
         title=event_data["title"],
         date=event_data["date"],

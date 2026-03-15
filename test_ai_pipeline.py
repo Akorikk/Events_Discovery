@@ -1,12 +1,14 @@
 from backend.crawler.crawler_manager import run_crawlers
 from backend.extractor.event_extractor import extract_event
 from backend.services.event_service import save_event, raw_event_exists
+from backend.services.webhook_service import send_webhook
 from backend.database.db import engine
 from backend.database.models import Base
 
 
 # Create database tables if they do not exist
 Base.metadata.create_all(bind=engine)
+
 
 def run_pipeline():
 
@@ -19,10 +21,11 @@ def run_pipeline():
         raw_text = event["raw_text"]
         source_url = event["source_url"]
 
-        # 🚀 Skip events already processed
+        # Skip events already processed
         if raw_event_exists(raw_text):
             continue
 
+        # Extract structured data using AI
         structured = extract_event(raw_text)
 
         if "error" in structured:
@@ -38,7 +41,12 @@ def run_pipeline():
 
         print("\nStructured Event:", structured)
 
-        save_event(structured)
+        # Save event
+        saved_event = save_event(structured)
+
+        # Send webhook only if a new event was saved
+        if saved_event:
+            send_webhook(structured)
 
 
 if __name__ == "__main__":
