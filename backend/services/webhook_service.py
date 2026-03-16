@@ -1,7 +1,7 @@
 import requests
 
 
-WEBHOOK_URL = "https://webhook.site/2bbbcd28-4631-46e7-a710-ed7c02fb152e"
+WEBHOOK_URL = "https://webhook.site/11869edc-5325-4bb7-96ae-ffd3fb5084db"
 
 
 def send_webhook(event_data):
